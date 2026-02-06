@@ -419,7 +419,7 @@ bin_centres = 0.5 * (bin_edges[:-1] + bin_edges[1:])
 # In[ ]:
 
 
-mask = (bin_centres > 20) & (counts > 0)
+mask = (bin_centres > 10) & (counts > 0)
 t_fit = bin_centres[mask]
 N_fit = counts[mask]
 sigma_n = np.sqrt(N_fit)
@@ -469,20 +469,20 @@ alpha_amps = []
 gamma_times_ns = []
 gamma_amps = []
 
-for col in alpha_correct.keys():
+for i in range(N):
 
     # alpha pulses
-    a_idx = np.asarray(alpha_peaks[col])
+    a_idx = np.asarray(alpha_peaks[i])
     if a_idx.size > 0:
-        a_amp = alpha_correct[col][a_idx]
+        a_amp = alpha_correct[i][a_idx]
         for ai, aa in zip(a_idx, a_amp):
             alpha_times_ns.append(ai * dt)
             alpha_amps.append(aa)
 
     # gamma pulses
-    g_idx = np.asarray(gamma_peaks[col])
+    g_idx = np.asarray(gamma_peaks[i])
     if g_idx.size > 0:
-        g_amp = gamma_correct[col][g_idx]
+        g_amp = gamma_correct[i][g_idx]
         for gi, gg in zip(g_idx, g_amp):
             gamma_times_ns.append(gi * dt)
             gamma_amps.append(gg)
@@ -493,12 +493,12 @@ print(dt)
 # In[ ]:
 
 
-mask = np.array(alpha_amps) < -0.2  # example threshold
+mask_thresh = np.array(alpha_amps) < -0.2  # example threshold
 
 plt.figure(figsize=(8,6))
 plt.hist2d(
-    np.array(alpha_times_ns)[mask],
-    np.array(alpha_amps)[mask],
+    np.array(alpha_times_ns)[mask_thresh],
+    np.array(alpha_amps)[mask_thresh],
     bins=[200, 200]
 )
 plt.colorbar(label="Counts")
@@ -507,12 +507,12 @@ plt.ylabel("Alpha pulse amplitude (V)", fontsize = 20)
 plt.title("Alpha: Time of arrival vs pulse height (threshold: -0.2V)", fontsize = 20)
 plt.show()
 
-mask1 = np.array(gamma_amps) < -0.2  # example threshold
+mask_thresh1 = np.array(gamma_amps) < -0.2  # example threshold
 
 plt.figure(figsize=(8,6))
 plt.hist2d(
-    np.array(gamma_times_ns)[mask1],
-    np.array(gamma_amps)[mask1],
+    np.array(gamma_times_ns)[mask_thresh1],
+    np.array(gamma_amps)[mask_thresh1],
     bins=[200, 200]
 )
 plt.colorbar(label="Counts")
