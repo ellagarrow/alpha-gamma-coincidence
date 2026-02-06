@@ -30,9 +30,9 @@ url = " https://zenodo.org/records/18154472/files/wave1 (1).txt"
 # print("First 200 chars:\n", r.text[:200])
 
 prefix = "ch1_"
-max_events = 100000 # larger than dataset 
+max_events = 10000000 # larger than dataset 
 #header_lines = 7 # or None for all
-samples = 1024 # samples per waveform 
+samples = 256 # samples per waveform 
 
 # Stream and process
 response = requests.get(url, stream=True) # starts streaming file line by line, stream = True means dont load everything to memory at once
@@ -83,9 +83,9 @@ url1 = " https://zenodo.org/records/18154472/files/wave0 (1).txt"
 
 
 prefix1 = "ch0_"
-max_events = 100000
+max_events = 10000000
 #header_lines = 7 # or None for all
-samples1 = 1024
+samples1 = 256
 
 # Stream and process
 response1 = requests.get(url1, stream=True) # starts streaming file line by line, stream = True means dont load everything to memory at once
