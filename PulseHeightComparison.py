@@ -32,7 +32,6 @@ prefix = "ch1_"
 max_events = 100000 # larger than dataset 
 samples = 1024 # samples per waveform 
 
-# Stream and process
 response = requests.get(url, stream=True) # starts streaming file line by line, stream = True means dont load everything to memory at once
 response.raise_for_status() # raises error if something fails
 
@@ -83,7 +82,6 @@ max_events = 100000
 #header_lines = 7 # or None for all
 samples1 = 1024
 
-# Stream and process
 response1 = requests.get(url1, stream=True) # starts streaming file line by line, stream = True means dont load everything to memory at once
 response1.raise_for_status() #raises error if something fails
 
@@ -114,7 +112,7 @@ print(f"Loaded {len(gamma)} waveforms.")
 print(f"First waveform length: {len(gamma[0])} samples")
 
 
-# ## Dataframe 
+# Dataframe 
 
 # In[4]:
 
@@ -141,7 +139,7 @@ df_alpha.head()
 dt = 1 / 250e6 # = 4ns per sample. 
 time = np.arange(1024) * dt #converts numbers 1-1024 to 4ns steps
 
-# conversion from ADC to voltage, variables defined
+# conversion from ADC to voltage
 N_bits = 12
 V_scale = 1
 ADC_max = 2**(N_bits-1)
