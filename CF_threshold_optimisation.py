@@ -113,13 +113,11 @@ def cfd_time(wf: np.ndarray, pk: int, frac: float, dt: float,
         return None  # not a negative pulse
 
     # Constant-fraction level is also negative
-    level = frac * A   # e.g. A=-0.5 V, frac=0.2 -> level=-0.1 V
+    level = frac * A  
 
     lo = max(1, pk - int(search_back))
     hi = min(pk, n - 1)
 
-    # Walk backwards from pk to find the rising-edge crossing:
-    # want wf[k-1] > level and wf[k] <= level
     for k in range(hi, lo, -1):
         y0 = wf[k - 1]
         y1 = wf[k]
@@ -166,15 +164,15 @@ a_hist = np.zeros(bins, dtype = np.int64)
 g_hist = np.zeros(bins, dtype = np.int64)
 
 
-# --- build coincidence pairs only: NO fixed LE threshold here ---
+# building coincidence pairs only, no fixed LE threshold here
 
-dt_peak_ns = []          # optional: leave empty for now
+dt_peak_ns = []          
 a_cond_V = []            # coincident alpha amplitudes
 g_cond_V = []            # coincident gamma amplitudes
 coinc_examples = []
 EXAMPLE_KEEP = 300
 
-pairs = []               # store (waveform_index, alpha_peak_index, gamma_peak_index, alpha_amp, gamma_amp)
+pairs = []               # store pairs
 
 processed = 0
 skipped_a = 0
@@ -392,49 +390,6 @@ def prompt_fwhm_score(dt_arr, peak_lo=-10, peak_hi=25):
 
 
 # In[11]:
-
-
-# leading edge function 
-
-def leading_edge_time(wf: np.ndarray, pk: int, thr: float, dt: float, search_back: int = 80, 
-                      return_samples: bool = False):
-    
-    wf = np.asarray(wf)   # making the waveform an array
-    n = wf.size  
-    if n < 2:   # need at least 2 samples for crossing
-        return None
-
-    pk = int(pk) 
-    if pk <= 0 or pk >= n:
-        return None
-
-    level = -abs(thr)  # negative crossing level
-
-    lo = max(1, pk - int(search_back))
-    hi = min(pk, n - 1)
-
-
-    for k in range(hi, lo, -1):
-        y0 = wf[k - 1]
-        y1 = wf[k]
-
-        # interpolation
-        
-        if (y0 > level) and (y1 <= level):
-            denom = (y1 - y0)
-            if denom == 0:
-                t_samp = float(k)
-            else:
-                frac = (level - y0) / denom  
-                t_samp = (k - 1) + float(frac)
-
-            return t_samp if return_samples else t_samp * dt
-
-    return None
-
-
-# In[12]:
-
 
 frac_grid = np.arange(0.02, 0.51, 0.01)   # scan 2% to 50%
 scan_cfd = [] 
